@@ -29,17 +29,22 @@ using System.IO;
 
 namespace device_code_flow_console
 {
+    /// <summary>
+    /// Description of the configuration of an AzureAD public client application (desktop/mobile application). This should
+    /// match the application registration done in the Azure portal
+    /// </summary>
     public class AuthenticationConfig
     {
         /// <summary>
         /// instance of Azure AD, for example public Azure or a Sovereign cloud (Azure China, Germany, US government, etc ...)
         /// </summary>
-        public string AzureADInstance { get; set; } = "https://login.microsoftonline.com/";
+        public string AzureADInstance { get; set; } = "https://login.microsoftonline.com/{0}";
 
         /// <summary>
-        /// The Tenant is the name of the Azure AD tenant in which this application is registered, or the domain
+        /// The Tenant is the ID of the Azure AD tenant in which this application is registered (a guid), or a domain name associated
+        /// with the Azure AD tenant. In the case of Device Code Flow it cannot be organizations
         /// </summary>
-        public string Tenant { get; set; } = "<Guid> of the tenant, or domain name";
+        public string Tenant { get; set; }
 
         /// <summary>
         /// Guid used by the application to uniquely identify itself to Azure AD
@@ -47,7 +52,7 @@ namespace device_code_flow_console
         public string ClientId { get; set; }
 
         /// <summary>
-        /// Sign-in URL of the tenant.
+        /// URL of the authority
         /// </summary>
         public string Authority
         {
@@ -60,15 +65,15 @@ namespace device_code_flow_console
         /// <summary>
         /// Reads the configuration from a json file
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static AuthenticationConfig ReadFromJsonFile(string file)
+        /// <param name="path">Path to the configuration json file</param>
+        /// <returns>AuthenticationConfig read from the json file</returns>
+        public static AuthenticationConfig ReadFromJsonFile(string path)
         {
             IConfigurationRoot Configuration;
 
             var builder = new ConfigurationBuilder()
              .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(file);
+            .AddJsonFile(path);
 
             Configuration = builder.Build();
             return Configuration.Get<AuthenticationConfig>();
