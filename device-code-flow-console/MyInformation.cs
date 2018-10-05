@@ -26,6 +26,7 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -38,30 +39,76 @@ namespace device_code_flow_console
         /// <summary>
         /// Scopes to request access to the protected Web API (here Microsoft Graph)
         /// </summary>
-        public static string[] Scopes { get; set; } = new string[] { "user.read" };
+        public static string[] Scopes { get; set; } = new string[] { "user.read", "User.ReadBasic.All" };
 
         /// <summary>
-        /// URL of the protected Web API to call (here Microsoft Graph)
+        /// URLs of the protected Web APIs to call (here Microsoft Graph)
         /// </summary>
-        public static string WebApiUrl { get; set; } = "https://graph.microsoft.com/v1.0/me";
+        public static string WebApiUrlMe { get; set; } = "https://graph.microsoft.com/v1.0/me";
+        public static string WebApiUrlMyManager { get; set; } = "https://graph.microsoft.com/v1.0/me/manager";
 
         /// <summary>
         /// Calls the Web API and displays its information
         /// </summary>
         /// <returns></returns>
-        public async Task DisplayMeAsync()
+        public async Task DisplayMeAndMyManagerAsync()
         {
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.json");
 
             app = new PublicClientApplication(config.ClientId, config.Authority);
-            AuthenticationResult result = await GetTokenForWebApiUsingDeviceCodeFlowAsync();
-            if (result != null)
+
+            AuthenticationResult authenticationResult = await AcquireATokenFromCacheOrDeviceCodeFlow();
+            if (authenticationResult != null)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"{result.Account.Username} successfully signed-in");
+                Console.WriteLine($"{authenticationResult.Account.Username} successfully signed-in");
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Me");
+                Console.ResetColor();
+                await CallWebApiAndDisplayResultASync(WebApiUrlMe, authenticationResult);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("My manager");
+                Console.ResetColor();
+                await CallWebApiAndDisplayResultASync(WebApiUrlMyManager, authenticationResult);
+            }
+        }
+
+        /// <summary>
+        /// Acquires a token from the token cache, or device code flow
+        /// </summary>
+        /// <returns>An AuthenticationResult if the user successfully signed-in, or otherwise <c>null</c></returns>
+        private async Task<AuthenticationResult> AcquireATokenFromCacheOrDeviceCodeFlow()
+        {
+            AuthenticationResult result;
+            var accounts = await app.GetAccountsAsync();
+
+            if (accounts.Any())
+            {
+                try
+                {
+                    // Attempt to get a token from the cache (or refresh it silently if needed)
+                    result = await app.AcquireTokenSilentAsync(Scopes, accounts.FirstOrDefault());
+                }
+                catch (MsalUiRequiredException)
+                {
+                    result = null;
+                }
+            }
+            else
+            {
+                result = null;
             }
 
-            await CallWebApiAndDisplayResultASync(result);
+            // No token in the cache, attempt by device code flow
+            if (result == null)
+            {
+                result = await GetTokenForWebApiUsingDeviceCodeFlowAsync();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -139,7 +186,7 @@ namespace device_code_flow_console
         /// Calls the protected Web API and displays the result
         /// </summary>
         /// <param name="authenticationResult"><see cref="AuthenticationResult"/> returned by successfull call to MSAL.NET</param>
-        private static async Task CallWebApiAndDisplayResultASync(AuthenticationResult authenticationResult)
+        private static async Task CallWebApiAndDisplayResultASync(string webApiUrl, AuthenticationResult authenticationResult)
         {
             if (authenticationResult != null)
             {
@@ -147,10 +194,10 @@ namespace device_code_flow_console
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", authenticationResult.AccessToken);
 
-                HttpResponseMessage response = await client.GetAsync(WebApiUrl);
+                HttpResponseMessage response = await client.GetAsync(webApiUrl);
                 if (response.IsSuccessStatusCode)
                 {
-                    string json = await client.GetStringAsync(WebApiUrl);
+                    string json = await response.Content.ReadAsStringAsync();
                     JObject me = JsonConvert.DeserializeObject(json) as JObject;
                     Console.ForegroundColor = ConsoleColor.Gray;
                     Display(me);
@@ -173,7 +220,7 @@ namespace device_code_flow_console
         /// <param name="result">Object to display</param>
         private static void Display(JObject result)
         {
-            foreach (JProperty child in result.Properties())
+            foreach (JProperty child in result.Properties().Where(p => !p.Name.StartsWith('@')))
             {
                 Console.WriteLine($"{child.Name} = {child.Value}");
             }

@@ -41,8 +41,10 @@ namespace device_code_flow_console
         public string AzureADInstance { get; set; } = "https://login.microsoftonline.com/{0}";
 
         /// <summary>
-        /// The Tenant is the ID of the Azure AD tenant in which this application is registered (a guid), or a domain name associated
-        /// with the Azure AD tenant. In the case of Device Code Flow it cannot be organizations
+        /// The Tenant is:
+        /// - either the tenant ID of the Azure AD tenant in which this application is registered (a guid)
+        /// or a domain name associated with the tenant
+        /// - or 'organizations' (for a multi-tenant application)
         /// </summary>
         public string Tenant { get; set; }
 

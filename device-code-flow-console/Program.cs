@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using System;
+
 namespace device_code_flow_console
 {
     /// <summary>
@@ -40,7 +42,16 @@ namespace device_code_flow_console
         static void Main(string[] args)
         {
             MyInformation myInformation = new MyInformation();
-            myInformation.DisplayMeAsync().Wait();
+            try
+            {
+                myInformation.DisplayMeAndMyManagerAsync().Wait();
+            }
+            catch(Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+            }
         }
     }
 }
