@@ -185,7 +185,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 For more information, see MSAL.NET's conceptual documentation:
 
-- [Device Code Flow for devices without a Web browser](aka.ms/msal-net-device-code-flow)
+- [Device Code Flow for devices without a Web browser](https://aka.ms/msal-net-device-code-flow)
 - [Customizing Token cache serialization](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/token-cache-serialization) (was not done in this sample, but you might want to add a serialized cache)
 
 For more information about the Azure AD v2.0 endpoint see:
