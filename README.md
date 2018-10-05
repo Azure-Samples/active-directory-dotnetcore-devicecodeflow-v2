@@ -11,8 +11,6 @@ endpoint: AAD V2
 
 [![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/IDDP-ASP.NET%20Core-CI)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=-1)
 
-> Note that this sample requires a version of MSAL.NET that will be released in a few days (hence the failure of the CI, as the NuGet package is not available yet). This version is available as a preview on MyGet: https://www.myget.org/F/aad-clients-nightly/api/v3/index.json
-
 ## About this sample
 
 ### Overview
