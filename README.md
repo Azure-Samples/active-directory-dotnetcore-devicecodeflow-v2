@@ -11,6 +11,8 @@ endpoint: AAD V2
 
 [![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/IDDP-ASP.NET%20Core-CI)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=-1)
 
+> Note that this sample requires a version of MSAL.NET will will be released in a few days (hence the failure of the CI, as the NuGet package is not available yet)
+
 ## About this sample
 
 ### Overview
@@ -183,7 +185,9 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 For more information, see MSAL.NET's conceptual documentation:
 
-> Provide links to the flows from the conceptual documentation
-> for instance:
 - [Device Code Flow for devices without a Web browser](aka.ms/msal-net-device-code-flow)
 - [Customizing Token cache serialization](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/wiki/token-cache-serialization) (was not done in this sample, but you might want to add a serialized cache)
+
+For more information about the Azure AD v2.0 endpoint see:
+
+- [https://aka.ms/aadv2](https://aka.ms/aadv2)
