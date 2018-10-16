@@ -41,7 +41,7 @@ The application obtains tokens through a two steps process especially designed f
 
 ## About the code
 
-The code for handling the token acquisition process is simple, as it boils down to calling the `AcquireTokenWithDeviceCodeAsync` method of `PublicClientApplication` to which you pass a callback that will display information to the user about where they should nativate to, and which code to enter to initiate a sign-in. See the `GetTokenForWebApiUsingDeviceCodeFlowAsync` methodin MyInformation.cs.
+The code for handling the token acquisition process is simple, as it boils down to calling the `AcquireTokenWithDeviceCodeAsync` method of `PublicClientApplication` to which you pass a callback that will display information to the user about where they should nativate to, and which code to enter to initiate a sign-in. See the `GetTokenForWebApiUsingDeviceCodeFlowAsync` method in `device-code-flow-console\PublicAppUsingDeviceCodeFlow.cs`.
 
 ```CSharp
 async Task<AuthenticationResult> GetTokenForWebApiUsingDeviceCodeFlowAsync()
