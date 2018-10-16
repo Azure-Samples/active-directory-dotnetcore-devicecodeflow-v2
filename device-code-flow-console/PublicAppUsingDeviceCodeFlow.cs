@@ -53,7 +53,7 @@ namespace device_code_flow_console
         /// Acquires a token from the token cache, or device code flow
         /// </summary>
         /// <returns>An AuthenticationResult if the user successfully signed-in, or otherwise <c>null</c></returns>
-        public async Task<AuthenticationResult> AcquireATokenFromCacheOrDeviceCodeFlow(IEnumerable<String> scopes)
+        public async Task<AuthenticationResult> AcquireATokenFromCacheOrDeviceCodeFlowAsync(IEnumerable<String> scopes)
         {
             AuthenticationResult result = null;
             var accounts = await App.GetAccountsAsync();

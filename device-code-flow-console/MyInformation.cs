@@ -60,14 +60,14 @@ namespace device_code_flow_console
         /// <returns></returns>
         public async Task DisplayMeAndMyManagerAsync()
         {
-            AuthenticationResult authenticationResult = await tokenAcquisitionHelper.AcquireATokenFromCacheOrDeviceCodeFlow(Scopes);
+            AuthenticationResult authenticationResult = await tokenAcquisitionHelper.AcquireATokenFromCacheOrDeviceCodeFlowAsync(Scopes);
             if (authenticationResult != null)
             {
                 DisplaySignedInAccount(authenticationResult.Account);
 
                 string accessToken = authenticationResult.AccessToken;
-                await CallWebApiAndDisplayResult(WebApiUrlMe, accessToken, "Me");
-                await CallWebApiAndDisplayResult(WebApiUrlMyManager, accessToken, "My manager");
+                await CallWebApiAndDisplayResultAsync(WebApiUrlMe, accessToken, "Me");
+                await CallWebApiAndDisplayResultAsync(WebApiUrlMyManager, accessToken, "My manager");
             }
         }
 
@@ -77,7 +77,7 @@ namespace device_code_flow_console
             Console.WriteLine($"{account.Username} successfully signed-in");
         }
 
-        private async Task CallWebApiAndDisplayResult(string url, string accessToken, string title)
+        private async Task CallWebApiAndDisplayResultAsync(string url, string accessToken, string title)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(title);
