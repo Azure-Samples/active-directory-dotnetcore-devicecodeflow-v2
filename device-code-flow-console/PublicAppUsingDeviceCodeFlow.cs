@@ -27,11 +27,11 @@ namespace device_code_flow_console
         protected PublicAppUsingDeviceCodeFlow(PublicClientApplication app, HttpClient httpClient)
         {
             App = app;
-            Client = httpClient;
+            HttpClient = httpClient;
         }
         protected PublicClientApplication App { get; private set; }
 
-        protected HttpClient Client { get; private set; }
+        protected HttpClient HttpClient { get; private set; }
 
         /// <summary>
         /// Acquires a token from the token cache, or device code flow
@@ -39,7 +39,7 @@ namespace device_code_flow_console
         /// <returns>An AuthenticationResult if the user successfully signed-in, or otherwise <c>null</c></returns>
         public async Task<AuthenticationResult> AcquireATokenFromCacheOrDeviceCodeFlow(IEnumerable<String> scopes)
         {
-            AuthenticationResult result;
+            AuthenticationResult result = null;
             var accounts = await App.GetAccountsAsync();
 
             if (accounts.Any())
@@ -51,12 +51,7 @@ namespace device_code_flow_console
                 }
                 catch (MsalUiRequiredException)
                 {
-                    result = null;
                 }
-            }
-            else
-            {
-                result = null;
             }
 
             // Cache empty or no token for account in the cache, attempt by device code flow
@@ -149,14 +144,14 @@ namespace device_code_flow_console
         {
             if (!string.IsNullOrEmpty(accessToken))
             {
-                var defaultRequetHeaders = Client.DefaultRequestHeaders;
+                var defaultRequetHeaders = HttpClient.DefaultRequestHeaders;
                 if (defaultRequetHeaders.Accept == null || !defaultRequetHeaders.Accept.Any(m => m.MediaType == "application/json"))
                 {
-                    Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 }
                 defaultRequetHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
-                HttpResponseMessage response = await Client.GetAsync(webApiUrl);
+                HttpResponseMessage response = await HttpClient.GetAsync(webApiUrl);
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
