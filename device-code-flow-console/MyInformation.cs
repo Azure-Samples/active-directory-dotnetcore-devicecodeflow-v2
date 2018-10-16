@@ -31,11 +31,17 @@ using System.Threading.Tasks;
 
 namespace device_code_flow_console
 {
-    public class MyInformation : PublicAppUsingDeviceCodeFlow
+    public class MyInformation
     {
-        public MyInformation(PublicClientApplication app, HttpClient client) : base(app, client)
+        public MyInformation(PublicClientApplication app, HttpClient client)
         {
+            tokenAcquisitionHelper = new PublicAppUsingDeviceCodeFlow(app);
+            protectedApiCallHelper = new ProtectedApiCallHelper(client);
         }
+
+        protected PublicAppUsingDeviceCodeFlow tokenAcquisitionHelper;
+
+        protected ProtectedApiCallHelper protectedApiCallHelper;
 
         /// <summary>
         /// Scopes to request access to the protected Web API (here Microsoft Graph)
@@ -54,24 +60,30 @@ namespace device_code_flow_console
         /// <returns></returns>
         public async Task DisplayMeAndMyManagerAsync()
         {
-            AuthenticationResult authenticationResult = await AcquireATokenFromCacheOrDeviceCodeFlow(Scopes);
+            AuthenticationResult authenticationResult = await tokenAcquisitionHelper.AcquireATokenFromCacheOrDeviceCodeFlow(Scopes);
             if (authenticationResult != null)
             {
+                DisplaySignedInAccount(authenticationResult.Account);
+
                 string accessToken = authenticationResult.AccessToken;
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"{authenticationResult.Account.Username} successfully signed-in");
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Me");
-                Console.ResetColor();
-                await CallWebApiAndDisplayResultASync(WebApiUrlMe, accessToken, Display);
-                Console.WriteLine();
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("My manager");
-                Console.ResetColor();
-                await CallWebApiAndDisplayResultASync(WebApiUrlMyManager, accessToken, Display);
+                await CallWebApiAndDisplayResult(WebApiUrlMe, accessToken, "Me");
+                await CallWebApiAndDisplayResult(WebApiUrlMyManager, accessToken, "My manager");
             }
+        }
+
+        private static void DisplaySignedInAccount(IAccount account)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{account.Username} successfully signed-in");
+        }
+
+        private async Task CallWebApiAndDisplayResult(string url, string accessToken, string title)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(title);
+            Console.ResetColor();
+            await protectedApiCallHelper.CallWebApiAndProcessResultASync(url, accessToken, Display);
+            Console.WriteLine();
         }
 
         /// <summary>
