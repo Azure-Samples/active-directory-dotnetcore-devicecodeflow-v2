@@ -51,7 +51,18 @@ namespace device_code_flow_console
             catch(Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
+                var aggregateException = ex as AggregateException;
+                if (aggregateException !=null)
+                {
+                    foreach(Exception subEx in aggregateException.InnerExceptions)
+                    {
+                        Console.WriteLine(subEx.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 Console.ResetColor();
             }
         }
