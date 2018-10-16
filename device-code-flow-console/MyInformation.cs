@@ -23,7 +23,6 @@ SOFTWARE.
 */
 
 using Microsoft.Identity.Client;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -32,20 +31,22 @@ using System.Threading.Tasks;
 
 namespace device_code_flow_console
 {
-    public class MyInformation
+    public class MyInformation : PublicAppUsingDeviceCodeFlow
     {
-        PublicClientApplication app;
+        public MyInformation(PublicClientApplication app, HttpClient client) : base(app, client)
+        {
+        }
 
         /// <summary>
         /// Scopes to request access to the protected Web API (here Microsoft Graph)
         /// </summary>
-        public static string[] Scopes { get; set; } = new string[] { "user.read", "User.ReadBasic.All" };
+        private static string[] Scopes { get; set; } = new string[] { "User.Read", "User.ReadBasic.All"};
 
         /// <summary>
-        /// URLs of the protected Web APIs to call (here Microsoft Graph)
+        /// URLs of the protected Web APIs to call (here Microsoft Graph endpoints)
         /// </summary>
-        public static string WebApiUrlMe { get; set; } = "https://graph.microsoft.com/v1.0/me";
-        public static string WebApiUrlMyManager { get; set; } = "https://graph.microsoft.com/v1.0/me/manager";
+        private static string WebApiUrlMe { get; set; } = "https://graph.microsoft.com/v1.0/me";
+        private static string WebApiUrlMyManager { get; set; } = "https://graph.microsoft.com/v1.0/me/manager";
 
         /// <summary>
         /// Calls the Web API and displays its information
@@ -53,164 +54,23 @@ namespace device_code_flow_console
         /// <returns></returns>
         public async Task DisplayMeAndMyManagerAsync()
         {
-            AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.json");
-
-            app = new PublicClientApplication(config.ClientId, config.Authority);
-
-            AuthenticationResult authenticationResult = await AcquireATokenFromCacheOrDeviceCodeFlow();
+            AuthenticationResult authenticationResult = await AcquireATokenFromCacheOrDeviceCodeFlow(Scopes);
             if (authenticationResult != null)
             {
+                string accessToken = authenticationResult.AccessToken;
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"{authenticationResult.Account.Username} successfully signed-in");
 
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Me");
                 Console.ResetColor();
-                await CallWebApiAndDisplayResultASync(WebApiUrlMe, authenticationResult);
+                await CallWebApiAndDisplayResultASync(WebApiUrlMe, accessToken, Display);
                 Console.WriteLine();
 
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("My manager");
                 Console.ResetColor();
-                await CallWebApiAndDisplayResultASync(WebApiUrlMyManager, authenticationResult);
-            }
-        }
-
-        /// <summary>
-        /// Acquires a token from the token cache, or device code flow
-        /// </summary>
-        /// <returns>An AuthenticationResult if the user successfully signed-in, or otherwise <c>null</c></returns>
-        private async Task<AuthenticationResult> AcquireATokenFromCacheOrDeviceCodeFlow()
-        {
-            AuthenticationResult result;
-            var accounts = await app.GetAccountsAsync();
-
-            if (accounts.Any())
-            {
-                try
-                {
-                    // Attempt to get a token from the cache (or refresh it silently if needed)
-                    result = await app.AcquireTokenSilentAsync(Scopes, accounts.FirstOrDefault());
-                }
-                catch (MsalUiRequiredException)
-                {
-                    result = null;
-                }
-            }
-            else
-            {
-                result = null;
-            }
-
-            // No token in the cache, attempt by device code flow
-            if (result == null)
-            {
-                result = await GetTokenForWebApiUsingDeviceCodeFlowAsync();
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Gets an access token so that the application accesses the web api (here MIcrosoft graph) in the name of the user
-        /// who signs-in on a separate device
-        /// </summary>
-        /// <returns>An authentication result, or null if the user canceled sign-in, or did not sign-in on a separate device
-        /// after a timeout (15 mins)</returns>
-        async Task<AuthenticationResult> GetTokenForWebApiUsingDeviceCodeFlowAsync()
-        {
-            AuthenticationResult result;
-            try
-            {
-                result = await app.AcquireTokenWithDeviceCodeAsync(Scopes,
-                    deviceCodeCallback =>
-                    {
-                        // This will print the message on the console which tells the user where to go sign-in using 
-                        // a separate browser and the code to enter once they sign in.
-                        // The AcquireTokenWithDeviceCodeAsync() method will poll the server after firing this
-                        // device code callback to look for the successful login of the user via that browser.
-                        // This background polling (whose interval and timeout data is also provided as fields in the 
-                        // deviceCodeCallback class) will occur until:
-                        // * The user has successfully logged in via browser and entered the proper code
-                        // * The timeout specified by the server for the lifetime of this code (typically ~15 minutes) has been reached
-                        // * The developing application calls the Cancel() method on a CancellationToken sent into the method.
-                        //   If this occurs, an OperationCanceledException will be thrown (see catch below for more details).
-                        Console.WriteLine(deviceCodeCallback.Message);
-                        return Task.FromResult(0);
-                    });
-            }
-            catch (MsalServiceException ex)
-            {
-                // Kind of errors you could have (in errorCode and ex.Message)
-                string errorCode = ex.ErrorCode;
-
-                // AADSTS50059: No tenant-identifying information found in either the request or implied by any provided credentials.
-                // Mitigation: as explained in the message from Azure AD, the authoriy needs to be tenanted. you have probably created
-                // your public client application with the following authorities:
-                // https://login.microsoftonline.com/common or https://login.microsoftonline.com/organizations
-
-                // AADSTS90133: Device Code flow is not supported under /common or /consumers endpoint.
-                // Mitigation: as explained in the message from Azure AD, the authority needs to be tenanted
-
-                // AADSTS90002: Tenant <tenantId or domain you used in the authority> not found. This may happen if there are 
-                // no active subscriptions for the tenant. Check with your subscription administrator.
-                // Mitigation: if you have an active subscription for the tenant this might be that you have a typo in the 
-                // tenantId (GUID) or tenant domain name, update the 
-
-                // The issues above are typically programming / app configuration errors, they need to be fixed
-                throw;
-            }
-
-            catch (OperationCanceledException)
-            {
-                // If you use an override with a CancellationToken, and call the Cancel() method on it, then this may be triggered
-                // to indicate that the operation was cancelled. 
-                // See https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads 
-                // for more detailed information on how C# supports cancellation in managed threads.
-                result = null;
-            }
-
-            catch (MsalClientException ex)
-            {
-                string errorCode = ex.ErrorCode;
-
-                // Verification code expired before contacting the server
-                // This exception will occur if the user does not manage to sign-in before a time out (15 mins) and the
-                // call to `AcquireTokenWithDeviceCodeAsync` is not cancelled in between
-                result = null;
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Calls the protected Web API and displays the result
-        /// </summary>
-        /// <param name="authenticationResult"><see cref="AuthenticationResult"/> returned by successfull call to MSAL.NET</param>
-        private static async Task CallWebApiAndDisplayResultASync(string webApiUrl, AuthenticationResult authenticationResult)
-        {
-            if (authenticationResult != null)
-            {
-
-                HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", authenticationResult.AccessToken);
-
-                HttpResponseMessage response = await client.GetAsync(webApiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    string json = await response.Content.ReadAsStringAsync();
-                    JObject me = JsonConvert.DeserializeObject(json) as JObject;
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Display(me);
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Failed to call the Web Api: {response.StatusCode}");
-                    string content = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Content: {content}");
-                }
-                Console.ResetColor();
-
+                await CallWebApiAndDisplayResultASync(WebApiUrlMyManager, accessToken, Display);
             }
         }
 
@@ -225,7 +85,5 @@ namespace device_code_flow_console
                 Console.WriteLine($"{child.Name} = {child.Value}");
             }
         }
-
-
     }
 }
