@@ -74,6 +74,7 @@ namespace device_code_flow_console
                 Console.ResetColor();
                 await CallWebApiAndDisplayResultASync(WebApiUrlMyManager, authenticationResult);
             }
+            Console.ReadKey();
         }
 
         /// <summary>
