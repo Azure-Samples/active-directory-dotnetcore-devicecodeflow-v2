@@ -65,6 +65,7 @@ namespace device_code_flow_console
                 }
                 Console.ResetColor();
             }
+            Console.ReadKey();
         }
 
         private static async Task RunAsync()
