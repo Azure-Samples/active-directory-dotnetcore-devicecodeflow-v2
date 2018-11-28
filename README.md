@@ -145,6 +145,9 @@ of the Azure Active Directory window respectively as *Name* and *Directory ID*
 1. In the  **Azure Active Directory** pane, click on **App registrations** and choose **New application registration**.
 1. Enter a friendly name for the application, for example 'active-directory-dotnet-deviceprofile' and select 'Native' as the *Application Type*.
 1. For the *Redirect URI*, enter `https://<your_tenant_name>/active-directory-dotnetcore-devicecodeflow`, replacing `<your_tenant_name>` with the name of your Azure AD tenant.
+1. In the list of pages for the app, select Manifest, and:
+   - In the manifest editor, set the **allowPublicClient** property to true
+   - Select **Save** in the bar above the manifest editor.
 1. Click **Create** to create the application.
 1. In the succeeding page, Find the *Application ID* value and record it for later. You'll need it to configure the Visual Studio configuration file for this project.
 1. Then click on **Settings**, and choose **Properties**.
