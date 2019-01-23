@@ -26,6 +26,7 @@ using Microsoft.Identity.Client;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Identity.Client.AppConfig;
 
 namespace device_code_flow_console
 {
@@ -65,12 +66,18 @@ namespace device_code_flow_console
                 }
                 Console.ResetColor();
             }
+
+            Console.ReadKey();
         }
 
         private static async Task RunAsync()
         {
             AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.json");
-            var app = new PublicClientApplication(config.ClientId, config.Authority);
+            var authority = config.Authority;
+            var authorityUri = new Uri(authority);
+            var app = PublicClientApplicationBuilder.Create(config.ClientId).
+                WithAuthority(authorityUri)
+                .Build();
             var httpClient = new HttpClient();
 
             MyInformation myInformation = new MyInformation(app, httpClient);

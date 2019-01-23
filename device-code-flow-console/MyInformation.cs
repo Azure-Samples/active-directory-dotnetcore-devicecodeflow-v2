@@ -33,7 +33,7 @@ namespace device_code_flow_console
 {
     public class MyInformation
     {
-        public MyInformation(PublicClientApplication app, HttpClient client)
+        public MyInformation(IPublicClientApplication app, HttpClient client)
         {
             tokenAcquisitionHelper = new PublicAppUsingDeviceCodeFlow(app);
             protectedApiCallHelper = new ProtectedApiCallHelper(client);
@@ -46,7 +46,7 @@ namespace device_code_flow_console
         /// <summary>
         /// Scopes to request access to the protected Web API (here Microsoft Graph)
         /// </summary>
-        private static string[] Scopes { get; set; } = new string[] { "User.Read", "User.ReadBasic.All"};
+        private static string[] Scopes { get; set; } = new string[] { "User.Read", "User.ReadBasic.All"}; // new string[] { "" };
 
         /// <summary>
         /// URLs of the protected Web APIs to call (here Microsoft Graph endpoints)

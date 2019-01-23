@@ -43,11 +43,11 @@ namespace device_code_flow_console
         /// <remarks>
         /// For more information see https://aka.ms/msal-net-device-code-flow
         /// </remarks>
-        public PublicAppUsingDeviceCodeFlow(PublicClientApplication app)
+        public PublicAppUsingDeviceCodeFlow(IPublicClientApplication app)
         {
             App = app;
         }
-        protected PublicClientApplication App { get; private set; }
+        protected IPublicClientApplication App { get; private set; }
 
         /// <summary>
         /// Acquires a token from the token cache, or device code flow
