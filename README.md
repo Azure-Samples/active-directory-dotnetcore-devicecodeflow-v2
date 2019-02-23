@@ -3,13 +3,13 @@ services: active-directory
 author: jmprieur
 platforms: dotnet
 level: 200
-client: .NET Core 2.1 console app
+client: .NET Core 2.2 console app
 service: Microsoft Graph
 endpoint: AAD v2.0
 ---
 # Invoking an API protected by Azure AD from a text-only device
 
-[![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/IDDP-ASP.NET%20Core-CI)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=-1)
+[![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/active-directory-dotnetcore-devicecodeflow-v2-CI)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=684)
 
 ## About this sample
 
