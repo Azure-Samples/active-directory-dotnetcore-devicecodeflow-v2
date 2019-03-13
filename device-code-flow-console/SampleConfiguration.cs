@@ -23,9 +23,11 @@ SOFTWARE.
  */
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client.AppConfig;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 
 namespace device_code_flow_console
 {
@@ -33,52 +35,42 @@ namespace device_code_flow_console
     /// Description of the configuration of an AzureAD public client application (desktop/mobile application). This should
     /// match the application registration done in the Azure portal
     /// </summary>
-    public class AuthenticationConfig
+    public class SampleConfiguration
     {
         /// <summary>
-        /// instance of Azure AD, for example public Azure or a Sovereign cloud (Azure China, Germany, US government, etc ...)
+        /// Authentication options
         /// </summary>
-        public string AzureADInstance { get; set; } = "https://login.microsoftonline.com/{0}";
+        public PublicClientApplicationOptions PublicClientApplicationOptions { get; set; }
 
         /// <summary>
-        /// The Tenant is:
-        /// - either the tenant ID of the Azure AD tenant in which this application is registered (a guid)
-        /// or a domain name associated with the tenant
-        /// - or 'organizations' (for a multi-tenant application)
+        /// Base URL for Microsoft Graph (it varies depending on whether the application is ran
+        /// in Microsoft Azure public clouds or national / sovereign clouds
         /// </summary>
-        public string Tenant { get; set; }
-
-        /// <summary>
-        /// Guid used by the application to uniquely identify itself to Azure AD
-        /// </summary>
-        public string ClientId { get; set; }
-
-        /// <summary>
-        /// URL of the authority
-        /// </summary>
-        public string Authority
-        {
-            get
-            {
-                return String.Format(CultureInfo.InvariantCulture, AzureADInstance, Tenant);
-            }
-        }
+        public string MicrosoftGraphBaseEndpoint { get; set; }
 
         /// <summary>
         /// Reads the configuration from a json file
         /// </summary>
         /// <param name="path">Path to the configuration json file</param>
-        /// <returns>AuthenticationConfig read from the json file</returns>
-        public static AuthenticationConfig ReadFromJsonFile(string path)
+        /// <returns>SampleConfiguration as read from the json file</returns>
+        public static SampleConfiguration ReadFromJsonFile(string path)
         {
+            // .NET configuration
             IConfigurationRoot Configuration;
 
             var builder = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
+             .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
             .AddJsonFile(path);
 
             Configuration = builder.Build();
-            return Configuration.Get<AuthenticationConfig>();
+            // Read the auth and graph endpoint config
+            SampleConfiguration config = new SampleConfiguration()
+            {
+                PublicClientApplicationOptions = new PublicClientApplicationOptions()
+            };
+            Configuration.Bind("Authentication", config.PublicClientApplicationOptions);
+            config.MicrosoftGraphBaseEndpoint = Configuration.GetValue<string>("WebAPI:MicrosoftGraphBaseEndpoint");
+            return config;
         }
     }
 

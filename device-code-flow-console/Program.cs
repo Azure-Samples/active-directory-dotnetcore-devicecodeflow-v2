@@ -47,40 +47,28 @@ namespace device_code_flow_console
         {
             try
             {
-                RunAsync().Wait();
+                RunAsync().GetAwaiter().GetResult();
             }
             catch(Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                var aggregateException = ex as AggregateException;
-                if (aggregateException !=null)
-                {
-                    foreach(Exception subEx in aggregateException.InnerExceptions)
-                    {
-                        Console.WriteLine(subEx.Message);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                Console.WriteLine(ex.Message);
                 Console.ResetColor();
             }
 
+            Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
 
         private static async Task RunAsync()
         {
-            AuthenticationConfig config = AuthenticationConfig.ReadFromJsonFile("appsettings.json");
-            var authority = config.Authority;
-            var authorityUri = new Uri(authority);
-            var app = PublicClientApplicationBuilder.Create(config.ClientId).
-                WithAuthority(authorityUri)
-                .Build();
+            SampleConfiguration config = SampleConfiguration.ReadFromJsonFile("appsettings.json");
+            var appConfig = config.PublicClientApplicationOptions;
+            var app = PublicClientApplicationBuilder.CreateWithApplicationOptions(appConfig)
+                                                    .Build();
             var httpClient = new HttpClient();
 
-            MyInformation myInformation = new MyInformation(app, httpClient);
+            MyInformation myInformation = new MyInformation(app, httpClient, config.MicrosoftGraphBaseEndpoint);
             await myInformation.DisplayMeAndMyManagerAsync();
         }
     }
