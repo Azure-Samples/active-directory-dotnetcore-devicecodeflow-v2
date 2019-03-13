@@ -43,11 +43,11 @@ namespace device_code_flow_console
         /// <remarks>
         /// For more information see https://aka.ms/msal-net-device-code-flow
         /// </remarks>
-        public PublicAppUsingDeviceCodeFlow(PublicClientApplication app)
+        public PublicAppUsingDeviceCodeFlow(IPublicClientApplication app)
         {
             App = app;
         }
-        protected PublicClientApplication App { get; private set; }
+        protected IPublicClientApplication App { get; private set; }
 
         /// <summary>
         /// Acquires a token from the token cache, or device code flow
@@ -63,7 +63,8 @@ namespace device_code_flow_console
                 try
                 {
                     // Attempt to get a token from the cache (or refresh it silently if needed)
-                    result = await App.AcquireTokenSilentAsync(scopes, accounts.FirstOrDefault());
+                    result = await App.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
+                        .ExecuteAsync();
                 }
                 catch (MsalUiRequiredException)
                 {
@@ -90,7 +91,7 @@ namespace device_code_flow_console
             AuthenticationResult result;
             try
             {
-                result = await App.AcquireTokenWithDeviceCodeAsync(scopes,
+                result = await App.AcquireTokenWithDeviceCode(scopes,
                     deviceCodeCallback =>
                     {
                         // This will print the message on the console which tells the user where to go sign-in using 
@@ -105,7 +106,7 @@ namespace device_code_flow_console
                         //   If this occurs, an OperationCanceledException will be thrown (see catch below for more details).
                         Console.WriteLine(deviceCodeCallback.Message);
                         return Task.FromResult(0);
-                    });
+                    }).ExecuteAsync();
             }
             catch (MsalServiceException ex)
             {
