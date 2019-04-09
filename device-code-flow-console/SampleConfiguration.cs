@@ -23,9 +23,7 @@ SOFTWARE.
  */
 
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client.AppConfig;
-using System;
-using System.Globalization;
+using Microsoft.Identity.Client;
 using System.IO;
 using System.Reflection;
 
