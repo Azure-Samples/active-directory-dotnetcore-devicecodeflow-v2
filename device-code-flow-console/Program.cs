@@ -26,7 +26,6 @@ using Microsoft.Identity.Client;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Identity.Client.AppConfig;
 
 namespace device_code_flow_console
 {
