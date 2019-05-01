@@ -55,7 +55,7 @@ namespace device_code_flow_console
         /// <param name="webApiUrl">Url of the Web API to call (supposed to return Json)</param>
         /// <param name="accessToken">Access token used as a bearer security token to call the Web API</param>
         /// <param name="processResult">Callback used to process the result of the call to the Web API</param>
-        public async Task CallWebApiAndProcessResultASync(string webApiUrl, string accessToken, Action<JObject> processResult)
+        public async Task CallWebApiAndProcessResultAsync(string webApiUrl, string accessToken, Action<JObject> processResult)
         {
             if (!string.IsNullOrEmpty(accessToken))
             {
@@ -77,9 +77,19 @@ namespace device_code_flow_console
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Failed to call the Web Api: {response.StatusCode}");
                     string content = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Content: {content}");
+
+                    // It's ok to not have a manager
+                    if (!content.Contains("Resource 'manager' does not exist"))
+                    {
+                        Console.WriteLine($"Failed to call the Web Api: {response.StatusCode}");
+                        Console.WriteLine($"Content: {content}");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("No manager");
+                    }
                 }
                 Console.ResetColor();
             }
