@@ -6,6 +6,14 @@ level: 200
 client: .NET Core 2.2 console app
 service: Microsoft Graph
 endpoint: Microsoft identity platform
+page_type: sample
+languages:
+  - csharp  
+products:
+  - azure
+  - azure-active-directory  
+  - dotnet
+description: "Shows how to use MSAL.NET in apps that cannot use interactive authentication to authenticate a user and call a web API."
 ---
 # Invoking an API protected by Microsoft identity platform from a text-only device
 
@@ -157,14 +165,14 @@ As a first step you'll need to:
 
 1. Sign in to the [Azure portal](https://portal.azure.com) using either a work or school account or a personal Microsoft account.
 1. If your account is present in more than one Azure AD tenant, select `Directory + Subscription` at the top right corner in the menu on top of the page, and switch your portal session to the desired Azure AD tenant.   
-1. In the left-hand navigation pane, select the **Azure Active Directory** service, and then select **App registrations (Preview)**.
+1. In the left-hand navigation pane, select the **Azure Active Directory** service, and then select **App registrations**.
 
 > In the next steps, you might need the tenant name (or directory name) or the tenant ID (or directory ID). These are presented in the **Properties**
 of the Azure Active Directory window respectively as *Name* and *Directory ID*
 
 #### Register the client app (active-directory-dotnet-deviceprofile)
 
-1. In **App registrations (Preview)** page, select **New registration**.
+1. In **App registrations** page, select **New registration**.
 1. When the **Register an application page** appears, enter your application's registration information:
    - In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `active-directory-dotnet-deviceprofile`.
    - In the **Supported account types** section, select **Accounts in any organizational directory**.
