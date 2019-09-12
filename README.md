@@ -1,20 +1,14 @@
 ---
-services: active-directory
-author: jmprieur
-platforms: dotnet
-level: 200
-client: .NET Core 2.2 console app
-service: Microsoft Graph
-endpoint: Microsoft identity platform
 page_type: sample
 languages:
-  - csharp  
+- csharp
+- powershell
 products:
-  - azure
-  - azure-active-directory  
-  - dotnet
-description: "Shows how to use MSAL.NET in apps that cannot use interactive authentication to authenticate a user and call a web API."
+- azure
+description: "This sample demonstrates how to leverage MSAL.NET from apps that do not have the capability of offering an interactive authentication experience."
+urlFragment: active-directory-dotnetcore-devicecodeflow-v2
 ---
+
 # Invoking an API protected by Microsoft identity platform from a text-only device
 
 [![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/active-directory-dotnetcore-devicecodeflow-v2-CI)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=684)
