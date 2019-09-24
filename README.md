@@ -4,7 +4,7 @@ languages:
 - csharp
 - powershell
 products:
-- azure
+- azure-active-directory
 description: "This sample demonstrates how to leverage MSAL.NET from apps that do not have the capability of offering an interactive authentication experience."
 urlFragment: invoke-protected-api-text
 ---
