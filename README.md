@@ -6,7 +6,7 @@ languages:
 products:
 - azure
 description: "This sample demonstrates how to leverage MSAL.NET from apps that do not have the capability of offering an interactive authentication experience."
-urlFragment: active-directory-dotnetcore-devicecodeflow-v2
+urlFragment: invoke-protected-api-text
 ---
 
 # Invoking an API protected by Microsoft identity platform from a text-only device
