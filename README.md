@@ -85,7 +85,7 @@ From your shell or command line:
 git clone https://github.com/Azure-Samples/active-directory-dotnetcore-devicecodeflow-v2.git
 ```
 
-or download and exact the repository .zip file.
+or download and extract the repository .zip file.
 
 > Given that the name of the sample is pretty long, and so are the name of the referenced NuGet packages, you might want to clone it in a folder close to the root of your hard drive, to avoid file size limitations on Windows.
 
@@ -151,7 +151,7 @@ If you want to use this automation:
 
 1. Open the Visual Studio solution and click start
 
-If ou don't want to use this automation, follow the steps below
+If you don't want to use this automation, follow the steps below
 
 #### First step: choose the Azure AD tenant where you want to create your applications
 
@@ -231,5 +231,5 @@ For more information, see MSAL.NET's conceptual documentation:
 - [Understand user and admin consent](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant#understand-user-and-admin-consent)
 - [Application and service principal objects in Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals)
 
-For more information about the Microsoft identitity platform, see:
+For more information about the Microsoft identity platform, see:
 - [https://aka.ms/aadv2](https://aka.ms/aadv2)
