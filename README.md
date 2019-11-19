@@ -41,6 +41,8 @@ The application obtains tokens through a two steps process especially designed f
 
 2. Upon successful authentication, the command-line app will receive the required tokens through a back channel and will use it to perform the web API calls it needs. In this case, the sample displays information about the user who signed-in and their manager.
 
+- Developers who wish to gain good familiarity of programming for Microsoft Graph are advised to go through the [An introduction to Microsoft Graph for developers](https://www.youtube.com/watch?v=EBbnpFdB92A) recorded session.
+
 ## About the code
 
 The code for handling the token acquisition process is simple, as it boils down to calling the `AcquireTokenWithDeviceCodeAsync` method of `PublicClientApplication` to which you pass a callback that will display information to the user about where they should nativate to, and which code to enter to initiate a sign-in. See the `GetTokenForWebApiUsingDeviceCodeFlowAsync` method in `device-code-flow-console\PublicAppUsingDeviceCodeFlow.cs`.
