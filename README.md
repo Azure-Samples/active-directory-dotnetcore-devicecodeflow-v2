@@ -184,12 +184,6 @@ of the Azure Active Directory window respectively as *Name* and *Directory ID*
    - In the **Delegated permissions** section, ensure that the right permissions are checked: **User.Read**, **User.ReadBasic.All**. Use the search box if necessary.
    - Select the **Add permissions** button
 
-1. At this stage permissions are assigned correctly but the client app does not allow interaction. 
-   Therefore no consent can be presented via a UI and accepted to use the service app. 
-   Click the **Grant/revoke admin consent for {tenant}** button, and then select **Yes** when you are asked if you want to grant consent for the
-   requested permissions for all account in the tenant.
-   You need to be an Azure AD tenant admin to do this.
-
 #### Configure the sample to use your Azure AD tenant
 
 In the steps below, ClientID is the same as Application ID or AppId.
