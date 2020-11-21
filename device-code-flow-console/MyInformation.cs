@@ -1,26 +1,5 @@
-﻿/*
- The MIT License (MIT)
-
-Copyright (c) 2015 Microsoft Corporation
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
 using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
@@ -45,7 +24,7 @@ namespace device_code_flow_console
         protected ProtectedApiCallHelper protectedApiCallHelper;
 
         /// <summary>
-        /// Scopes to request access to the protected Web API (here Microsoft Graph)
+        /// Scopes to request access to the protected web API (here Microsoft Graph)
         /// </summary>
         private static string[] Scopes { get; set; } = new string[] { "User.Read", "User.ReadBasic.All"};
 
@@ -55,13 +34,13 @@ namespace device_code_flow_console
         private string MicrosoftGraphBaseEndpoint { get; set; }
 
         /// <summary>
-        /// URLs of the protected Web APIs to call (here Microsoft Graph endpoints)
+        /// URLs of the protected web APIs to call (here Microsoft Graph endpoints)
         /// </summary>
         private string WebApiUrlMe { get { return $"{MicrosoftGraphBaseEndpoint}/v1.0/me"; } }
         private string WebApiUrlMyManager { get { return $"{MicrosoftGraphBaseEndpoint}/v1.0/me/manager"; } }
 
         /// <summary>
-        /// Calls the Web API and displays its information
+        /// Calls the web API and displays its information
         /// </summary>
         /// <returns></returns>
         public async Task DisplayMeAndMyManagerAsync()
@@ -93,7 +72,7 @@ namespace device_code_flow_console
         }
 
         /// <summary>
-        /// Display the result of the Web API call
+        /// Display the result of the web API call
         /// </summary>
         /// <param name="result">Object to display</param>
         private static void Display(JObject result)

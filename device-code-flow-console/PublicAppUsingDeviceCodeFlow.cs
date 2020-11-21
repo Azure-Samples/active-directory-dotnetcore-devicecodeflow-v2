@@ -1,26 +1,5 @@
-﻿/*
- The MIT License (MIT)
-
-Copyright (c) 2015 Microsoft Corporation
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
 using Microsoft.Identity.Client;
 using System;
@@ -114,7 +93,7 @@ namespace device_code_flow_console
                 string errorCode = ex.ErrorCode;
 
                 // AADSTS50059: No tenant-identifying information found in either the request or implied by any provided credentials.
-                // Mitigation: as explained in the message from Azure AD, the authoriy needs to be tenanted. you have probably created
+                // Mitigation: as explained in the message from Azure AD, the authority needs to be tenanted. you have probably created
                 // your public client application with the following authorities:
                 // https://login.microsoftonline.com/common or https://login.microsoftonline.com/organizations
 
@@ -129,7 +108,6 @@ namespace device_code_flow_console
                 // The issues above are typically programming / app configuration errors, they need to be fixed
                 throw;
             }
-
             catch (OperationCanceledException)
             {
                 // If you use an override with a CancellationToken, and call the Cancel() method on it, then this may be triggered
@@ -138,7 +116,6 @@ namespace device_code_flow_console
                 // for more detailed information on how C# supports cancellation in managed threads.
                 result = null;
             }
-
             catch (MsalClientException ex)
             {
                 string errorCode = ex.ErrorCode;
