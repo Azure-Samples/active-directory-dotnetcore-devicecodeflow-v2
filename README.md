@@ -196,7 +196,7 @@ Open the solution in Visual Studio to configure the projects
 
 1. Open the `device-code-flow-console\appsettings.json` file
 1. Find the app key `ClientId` and replace the existing value with the application ID (clientId) of the `active-directory-dotnet-deviceprofile` application copied from the Azure portal.
-1. (Optional) Find the line where `Tenant` is set and replace the existing value with your tenant ID.
+1. (Optional) If you created a single tenant application, find the line where `TenantId` is set and replace the existing value with your tenant ID.
 
 ## Community Help and Support
 
