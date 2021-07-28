@@ -45,7 +45,7 @@ The application obtains tokens through a two steps process especially designed f
 
 ## About the code
 
-The code for handling the token acquisition process is simple, as it boils down to calling the `AcquireTokenWithDeviceCodeAsync` method of `PublicClientApplication` to which you pass a callback that will display information to the user about where they should nativate to, and which code to enter to initiate a sign-in. See the `GetTokenForWebApiUsingDeviceCodeFlowAsync` method in `device-code-flow-console\PublicAppUsingDeviceCodeFlow.cs`.
+The code for handling the token acquisition process is simple, as it boils down to calling the `AcquireTokenWithDeviceCodeAsync` method of `PublicClientApplication` to which you pass a callback that will display information to the user about where they should navigate to, and which code to enter to initiate a sign-in. See the `GetTokenForWebApiUsingDeviceCodeFlowAsync` method in `device-code-flow-console\PublicAppUsingDeviceCodeFlow.cs`.
 
 ```CSharp
 async Task<AuthenticationResult> GetTokenForWebApiUsingDeviceCodeFlowAsync()
@@ -62,7 +62,7 @@ async Task<AuthenticationResult> GetTokenForWebApiUsingDeviceCodeFlowAsync()
             }
         
         ...
-        // error handling omited here (see sample for details)
+        // error handling omitted here (see sample for details)
         return result;
     }
 ```
@@ -71,7 +71,7 @@ async Task<AuthenticationResult> GetTokenForWebApiUsingDeviceCodeFlowAsync()
 
 To run this sample, you'll need:
 
-- [Visual Studio 2017](https://aka.ms/vsdownload) or just the [.NET Core SDK](https://www.microsoft.com/net/learn/get-started)/. You will need the .NET Core 2.2 SDK. If you don't have it already, you can download from [Visual Studio SDKs](https://dotnet.microsoft.com/download/visual-studio-sdks)
+- [Visual Studio 2019](https://aka.ms/vsdownload) or just the [.NET Core SDK](https://www.microsoft.com/net/learn/get-started). You will need the .NET Core 3.1 SDK. If you don't have it already, you can download from [Visual Studio SDKs](https://dotnet.microsoft.com/download/visual-studio-sdks)
 - An Internet connection
 - A Windows machine (necessary if you want to run the app on Windows)
 - An OS X machine (necessary if you want to run the app on Mac)
@@ -91,9 +91,9 @@ or download and extract the repository .zip file.
 
 > Given that the name of the sample is pretty long, and so are the name of the referenced NuGet packages, you might want to clone it in a folder close to the root of your hard drive, to avoid file size limitations on Windows.
 
-### Step 2: Setup .NET core
+### Step 2: Setup .NET Core
 
-The .NET core [documentation pages](https://www.microsoft.com/net/learn/get-started) provide step by step instructions for installing .NET Core (the .NET Execution Environment) for your platform of choice.
+The .NET Core [documentation pages](https://www.microsoft.com/net/learn/get-started) provide step by step instructions for installing .NET Core (the .NET Execution Environment) for your platform of choice.
 
 ### Step 3: Run the sample
 
@@ -131,7 +131,7 @@ Then:
 
 ### Optional: configure the sample as an app in your directory tenant
 
-The instructions so far leveraged the Azure AD entry for the app in a Microsoft test tenant: given that the app is multitenant, anybody can run the sample against that app entry.
+The instructions so far leveraged the Azure AD entry for the app in a Microsoft test tenant: given that the app is multi-tenant, anybody can run the sample against that app entry.
 To register your project in your own Azure AD tenant, you can find instructions to manually provision the sample in your own tenant, so that you can exercise complete control on the app settings and behavior.
 
 - either follow the manual steps 
@@ -145,7 +145,7 @@ If you want to use this automation:
    ```PowerShell
    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
    ```
-1. Run the script to create your Azure AD application and configure the code of the sample application accordinly. 
+1. Run the script to create your Azure AD application and configure the code of the sample application accordingly. 
    ```PowerShell
    .\AppCreationScripts\Configure.ps1
    ```
