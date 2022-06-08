@@ -13,6 +13,8 @@ urlFragment: invoke-protected-api-text
 
 [![Build status](https://identitydivision.visualstudio.com/IDDP/_apis/build/status/AAD%20Samples/.NET%20client%20samples/active-directory-dotnetcore-devicecodeflow-v2-CI)](https://identitydivision.visualstudio.com/IDDP/_build/latest?definitionId=684)
 
+> We have renamed the origin to main. To rename your local repo follow the directions [here](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/renaming-a-branch#updating-a-local-clone-after-a-branch-name-changes).
+
 ## About this sample
 
 ### Overview
