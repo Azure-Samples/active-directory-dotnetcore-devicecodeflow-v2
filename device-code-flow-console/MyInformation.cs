@@ -10,8 +10,17 @@ using System.Threading.Tasks;
 
 namespace device_code_flow_console
 {
+    /// <summary>
+    /// MyInformation
+    /// </summary>
     public class MyInformation
     {
+        /// <summary>
+        /// MyInformation ctor
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="client"></param>
+        /// <param name="microsoftGraphBaseEndpoint"></param>
         public MyInformation(IPublicClientApplication app, HttpClient client, string microsoftGraphBaseEndpoint)
         {
             tokenAcquisitionHelper = new PublicAppUsingDeviceCodeFlow(app);
@@ -19,8 +28,14 @@ namespace device_code_flow_console
             this.MicrosoftGraphBaseEndpoint = microsoftGraphBaseEndpoint;
         }
 
+        /// <summary>
+        /// tokenAcquisitionHelper
+        /// </summary>
         protected PublicAppUsingDeviceCodeFlow tokenAcquisitionHelper;
 
+        /// <summary>
+        /// protectedApiCallHelper
+        /// </summary>
         protected ProtectedApiCallHelper protectedApiCallHelper;
 
         /// <summary>
@@ -45,14 +60,14 @@ namespace device_code_flow_console
         /// <returns></returns>
         public async Task DisplayMeAndMyManagerAsync()
         {
-            AuthenticationResult authenticationResult = await tokenAcquisitionHelper.AcquireATokenFromCacheOrDeviceCodeFlowAsync(Scopes);
+            AuthenticationResult authenticationResult = await tokenAcquisitionHelper.AcquireATokenFromCacheOrDeviceCodeFlowAsync(Scopes).ConfigureAwait(false);
             if (authenticationResult != null)
             {
                 DisplaySignedInAccount(authenticationResult.Account);
 
                 string accessToken = authenticationResult.AccessToken;
-                await CallWebApiAndDisplayResultAsync(WebApiUrlMe, accessToken, "Me");
-                await CallWebApiAndDisplayResultAsync(WebApiUrlMyManager, accessToken, "My manager");
+                await CallWebApiAndDisplayResultAsync(WebApiUrlMe, accessToken, "Me").ConfigureAwait(false);
+                await CallWebApiAndDisplayResultAsync(WebApiUrlMyManager, accessToken, "My manager").ConfigureAwait(false);
             }
         }
 
@@ -67,7 +82,7 @@ namespace device_code_flow_console
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(title);
             Console.ResetColor();
-            await protectedApiCallHelper.CallWebApiAndProcessResultAsync(url, accessToken, Display);
+            await protectedApiCallHelper.CallWebApiAndProcessResultAsync(url, accessToken, Display).ConfigureAwait(false);
             Console.WriteLine();
         }
 

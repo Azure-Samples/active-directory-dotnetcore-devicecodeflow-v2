@@ -18,7 +18,6 @@ namespace device_code_flow_console
         /// Constructor of a public application leveraging Device Code Flow to sign-in a user
         /// </summary>
         /// <param name="app">MSAL.NET Public client application</param>
-        /// <param name="httpClient">HttpClient used to call the protected Web API</param>
         /// <remarks>
         /// For more information see https://aka.ms/msal-net-device-code-flow
         /// </remarks>
@@ -26,6 +25,10 @@ namespace device_code_flow_console
         {
             App = app;
         }
+
+        /// <summary>
+        /// IPublicClientApplication
+        /// </summary>
         protected IPublicClientApplication App { get; private set; }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace device_code_flow_console
         public async Task<AuthenticationResult> AcquireATokenFromCacheOrDeviceCodeFlowAsync(IEnumerable<String> scopes)
         {
             AuthenticationResult result = null;
-            var accounts = await App.GetAccountsAsync();
+            var accounts = await App.GetAccountsAsync().ConfigureAwait(false);
 
             if (accounts.Any())
             {
@@ -43,7 +46,7 @@ namespace device_code_flow_console
                 {
                     // Attempt to get a token from the cache (or refresh it silently if needed)
                     result = await App.AcquireTokenSilent(scopes, accounts.FirstOrDefault())
-                        .ExecuteAsync();
+                        .ExecuteAsync().ConfigureAwait(false);
                 }
                 catch (MsalUiRequiredException)
                 {
@@ -53,7 +56,7 @@ namespace device_code_flow_console
             // Cache empty or no token for account in the cache, attempt by device code flow
             if (result == null)
             {
-                result = await GetTokenForWebApiUsingDeviceCodeFlowAsync(scopes);
+                result = await GetTokenForWebApiUsingDeviceCodeFlowAsync(scopes).ConfigureAwait(false);
             }
 
             return result;
@@ -85,7 +88,7 @@ namespace device_code_flow_console
                         //   If this occurs, an OperationCanceledException will be thrown (see catch below for more details).
                         Console.WriteLine(deviceCodeCallback.Message);
                         return Task.FromResult(0);
-                    }).ExecuteAsync();
+                    }).ExecuteAsync().ConfigureAwait(false);
             }
             catch (MsalServiceException ex)
             {
